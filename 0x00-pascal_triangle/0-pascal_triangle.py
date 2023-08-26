@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-import math
 
 """
 Create a function def pascal_triangle(n): that returns a list of lists of
@@ -15,15 +14,14 @@ def pascal_triangle(n):
     if n <= 0:
         return []
 
-    result = []
-    for row in range(n):
-        rowArray = []
+    result = [[1]]
+    for row in range(1, n):
+        rowArray = [1]
 
-        for value in range(0, row + 1):
-            binomial = int(math.factorial(row) /
-                           (math.factorial(value) *
-                            math.factorial(row - value)))
+        for value in range(1, row):
+            binomial = result[row - 1][value - 1] + result[row - 1][value]
             rowArray.append(binomial)
+        rowArray.append(1)
 
         result.append(rowArray)
 
