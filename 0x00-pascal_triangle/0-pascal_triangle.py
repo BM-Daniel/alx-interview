@@ -11,12 +11,12 @@ def pascal_triangle(n):
     """
     Pascal triangle function implemented
     """
-    result = []
 
     if n <= 0:
-        return result
+        return []
 
-    for row in range(0, n):
+    result = []
+    for row in range(n):
         rowArray = []
 
         for value in range(0, row + 1):
