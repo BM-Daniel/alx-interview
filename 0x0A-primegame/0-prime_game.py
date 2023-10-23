@@ -10,31 +10,65 @@ cannot make a move loses the game.
 
 def isWinner(x, nums):
     '''
-    Function for game
+    Function for prime game
     '''
-    if x < 1 or not nums:
+    winnerCounter = {'Maria': 0, 'Ben': 0}
+
+    for i in range(x):
+        roundWinner = isRoundWinner(nums[i], x)
+
+        if roundWinner is not None:
+            winnerCounter[roundWinner] += 1
+
+    if winnerCounter['Maria'] > winnerCounter['Ben']:
+        return 'Maria'
+    elif winnerCounter['Ben'] > winnerCounter['Maria']:
+        return 'Ben'
+    else:
         return None
 
-    marias_wins = 0
-    bens_wins = 0
 
-    n = max(nums)
-    primes = [True for _ in range(1, n + 1, 1)]
-    primes[0] = False
+def isRoundWinner(n, x):
+    '''
+    Function to round winner
+    '''
+    list = [i for i in range(1, n + 1)]
+    players = ['Maria', 'Ben']
 
-    for i, is_prime in enumerate(primes, 1):
-        if i == 1 or not is_prime:
-            continue
+    for i in range(n):
+        currentPlayer = players[i % 2]
+        selectedIdxs = []
+        prime = -1
 
-        for j in range(i + i, n + 1, i):
-            primes[j - 1] = False
+        for idx, num in enumerate(list):
+            if prime != -1:
+                if num % prime == 0:
+                    selectedIdxs.append(idx)
+            else:
+                if isPrime(num):
+                    selectedIdxs.append(idx)
+                    prime = num
 
-    for _, n in zip(range(x), nums):
-        count_primes = len(list(filter(lambda x: x, primes[0: n])))
-        bens_wins += count_primes % 2 == 0
-        marias_wins += count_primes % 2 == 1
+        if prime == -1:
+            if currentPlayer == players[0]:
+                return players[1]
+            else:
+                return players[0]
+        else:
+            for idx, val in enumerate(selectedIdxs):
+                del list[val - idx]
+    return None
 
-    if marias_wins == bens_wins:
-        return None
 
-    return 'Ben' if bens_wins > marias_wins else 'Maria'
+def isPrime(n):
+    '''
+    Function for other conditions
+    '''
+    if n == 1 or n == 0 or (n % 2 == 0 and n > 2):
+        return False
+    else:
+        for i in range(3, int(n**(1/2))+1, 2):
+            if n % i == 0:
+                return "Not prime"
+
+        return True
