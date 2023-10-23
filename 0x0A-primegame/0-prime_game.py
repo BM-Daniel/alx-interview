@@ -15,11 +15,11 @@ def isWinner(x, nums):
     if x < 1 or not nums:
         return None
 
-    maria_wins = 0
-    ben_wins = 0
+    marias_wins = 0
+    bens_wins = 0
 
     n = max(nums)
-    primes = [True for _ in range(1, n+1, 1)]
+    primes = [True for _ in range(1, n + 1, 1)]
     primes[0] = False
 
     for i, is_prime in enumerate(primes, 1):
@@ -31,10 +31,10 @@ def isWinner(x, nums):
 
     for _, n in zip(range(x), nums):
         count_primes = len(list(filter(lambda x: x, primes[0: n])))
-        ben_wins += count_primes % 2 == 0
-        maria_wins += count_primes % 2 == 1
+        bens_wins += count_primes % 2 == 0
+        marias_wins += count_primes % 2 == 1
 
-        if ben_wins == maria_wins:
-            return None
+    if marias_wins == bens_wins:
+        return None
 
-        return 'Ben' if ben_wins > maria_wins else 'Maria'
+    return 'Ben' if bens_wins > marias_wins else 'Maria'
