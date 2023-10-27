@@ -8,67 +8,75 @@ cannot make a move loses the game.
 '''
 
 
+def findMultiples(num, targets):
+    """
+    Finds multiples of a given number within a list
+    """
+    for i in targets:
+        if i % num == 0:
+            targets.remove(i)
+    return targets
+
+
+def isPrime(i):
+    """
+    Check if a number is prime.
+    """
+    if i == 1:
+        return False
+    for j in range(2, i):
+        if i % j == 0:
+            return False
+    return True
+
+
+def findPrimes(n):
+    """
+    Dispatch a given set into prime numbers and non-prime numbers.
+    """
+    counter = 0
+    target = list(n)
+    for i in range(1, len(target) + 1):
+        if isPrime(i):
+            counter += 1
+            target.remove(i)
+            target = findMultiples(i, target)
+        else:
+            pass
+    return counter
+
+
 def isWinner(x, nums):
-    '''
-    Function for prime game
-    '''
-    winnerCounter = {'Maria': 0, 'Ben': 0}
+    """
+    Maria and Ben are playing a game.Given a set of consecutive integers
+    starting from 1 up to and including n, they take turns choosing a
+    prime number from the set and removing that number and its
+    multiples from the set.
+    The player that cannot make a move loses the game.
 
-    for i in range(x):
-        roundWinner = isRoundWinner(nums[i], x)
+    They play x rounds of the game, where n may be different for each round.
+    Assuming Maria always goes first and both players play optimally,
+    determine who the winner of each game is.
+    """
+    players = {'Maria': 0, 'Ben': 0}
+    cluster = set()
+    for elem in range(x):
+        nums.sort()
+        num = nums[elem]
+        for i in range(1, num + 1):
+            cluster.add(i)
+            if i == num + 1:
+                break
+        temp = findPrimes(cluster)
 
-        if roundWinner is not None:
-            winnerCounter[roundWinner] += 1
+        if temp % 2 == 0:
+            players['Ben'] += 1
+        elif temp % 2 != 0:
+            players['Maria'] += 1
 
-    if winnerCounter['Maria'] > winnerCounter['Ben']:
+    if players['Maria'] > players['Ben']:
         return 'Maria'
-    elif winnerCounter['Ben'] > winnerCounter['Maria']:
+    elif players['Maria'] < players['Ben']:
         return 'Ben'
     else:
         return None
-
-
-def isRoundWinner(n, x):
-    '''
-    Function to round winner
-    '''
-    list = [i for i in range(1, n + 1)]
-    players = ['Maria', 'Ben']
-
-    for i in range(n):
-        currentPlayer = players[i % 2]
-        selectedIdxs = []
-        prime = -1
-
-        for idx, num in enumerate(list):
-            if prime != -1:
-                if num % prime == 0:
-                    selectedIdxs.append(idx)
-            else:
-                if isPrime(num):
-                    selectedIdxs.append(idx)
-                    prime = num
-
-        if prime == -1:
-            if currentPlayer == players[0]:
-                return players[1]
-            else:
-                return players[0]
-        else:
-            for idx, val in enumerate(selectedIdxs):
-                del list[val - idx]
-    return None
-
-
-def isPrime(n):
-    '''
-    Function for other conditions
-    '''
-    if n == 1 or n == 0 or (n % 2 == 0 and n > 2):
-        return False
-    else:
-        for i in range(3, int(n**(1/2))+1, 2):
-            if n % i == 0:
-                return "Not prime"
-
-        return True
