@@ -1,11 +1,11 @@
 #!/usr/bin/node
 
-const util = require("util");
-const request = util.promisify(require("request"));
+const util = require('util');
+const request = util.promisify(require('request'));
 const filmID = process.argv[2];
 
-async function starwarsCharacters(filmID) {
-  const endpoint = "https://swapi-api.hbtn.io/api/films/" + filmID;
+async function starwarsCharacters (filmID) {
+  const endpoint = 'https://swapi-api.hbtn.io/api/films/' + filmID;
   let response = await (await request(endpoint)).body;
 
   response = JSON.parse(response);
